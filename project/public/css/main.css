@@ -1409,3 +1409,14 @@ main {
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%); }
+
+.page-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-not-found a {
+  font-size: 32px;
+  color: #fff;
+}
