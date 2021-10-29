@@ -1,11 +1,26 @@
-function FilmCard(): JSX.Element {
+import {FilmDataType} from '../../types/films';
+import {Link} from 'react-router-dom';
+
+type FilmCardProps = {
+  film: FilmDataType;
+  handleClick: (movieState: FilmDataType) => void;
+  handleHover: ((movieState: FilmDataType) => void) | null;
+}
+
+function FilmCard({film, handleClick, handleHover}: FilmCardProps): JSX.Element {
+  const {
+    id,
+    image,
+    title,
+  } = film;
+
   return (
-    <article className="small-film-card catalog__films-card">
+    <article onMouseEnter={() => {if(handleHover !== null) {handleHover(film);}}} className="small-film-card catalog__films-card">
       <div className="small-film-card__image">
-        <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg" alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175" />
+        <img src={image} alt={title} width="280" height="175" />
       </div>
       <h3 className="small-film-card__title">
-        <a className="small-film-card__link" href="film-page.html">Fantastic Beasts: The Crimes of Grindelwald</a>
+        <Link className="small-film-card__link" to={`/films/${id}`} onClick={() => handleClick(film)}>{title}</Link>
       </h3>
     </article>
   );

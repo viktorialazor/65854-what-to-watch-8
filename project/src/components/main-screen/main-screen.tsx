@@ -1,21 +1,25 @@
-import React from 'react';
-import FilmCard from '../film-card/film-card';
+import React, {useState} from 'react';
+import {FilmDataType} from '../../types/films';
 import Logo from '../logo/logo';
+import MovieList from '../movie-list/movie-list';
 
-const FILM_CARD_AMOUNT = 20;
-
-type PromoFilmProps = {
-  title: string,
-  genre: string,
-  year: number,
+type MainScreenProps = {
+  films: FilmDataType[];
+  handleClick: (newActiveClickFilm: FilmDataType) => void;
 }
 
-function MainScreen({title, genre, year}: PromoFilmProps): JSX.Element {
+function MainScreen({films, handleClick}: MainScreenProps): JSX.Element {
+  const [activeFilm, setActiveFilm] = useState(films[0]);
+
+  const handleHover = (newActiveFilm: FilmDataType) => {
+    setActiveFilm(() => newActiveFilm);
+  };
+
   return (
     <React.Fragment>
       <section className="film-card">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+          <img src={activeFilm.background} alt={activeFilm.title} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -38,14 +42,14 @@ function MainScreen({title, genre, year}: PromoFilmProps): JSX.Element {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={activeFilm.poster} alt={activeFilm.title} width="218" height="327" />
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{title}</h2>
+              <h2 className="film-card__title">{activeFilm.title}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{genre}</span>
-                <span className="film-card__year">{year}</span>
+                <span className="film-card__genre">{activeFilm.genre[0]}</span>
+                <span className="film-card__year">{activeFilm.year}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -104,9 +108,7 @@ function MainScreen({title, genre, year}: PromoFilmProps): JSX.Element {
           </ul>
 
           <div className="catalog__films-list">
-            {
-              new Array(FILM_CARD_AMOUNT).fill(null).map((item, index) => item = index).map((item) => <FilmCard key={item} />)
-            }
+            <MovieList films={films} handleClick={handleClick} handleHover={handleHover}/>
           </div>
 
           <div className="catalog__more">
