@@ -1,16 +1,37 @@
 import React from 'react';
-import FilmCard from '../film-card/film-card';
+import {FilmDataType} from '../../types/films';
+import {getRuntime} from '../../utils/common';
 import Logo from '../logo/logo';
+import MovieList from '../movie-list/movie-list';
 
 const FILM_CARD_AMOUNT = 4;
 
-function MovieDetails(): JSX.Element {
+type MovieDetailsProps = {
+  films: FilmDataType[];
+  film: FilmDataType;
+  handleClick: (newActiveClickFilm: FilmDataType) => void;
+}
+
+function MovieDetails({films, film, handleClick}: MovieDetailsProps): JSX.Element {
+  const {
+    background,
+    poster,
+    title,
+    genre,
+    year,
+    director,
+    actors,
+    duration,
+  } = film;
+
+  const runtime = getRuntime(duration);
+
   return (
     <React.Fragment>
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+            <img src={background} alt={title} />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -32,10 +53,10 @@ function MovieDetails(): JSX.Element {
 
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">The Grand Budapest Hotel</h2>
+              <h2 className="film-card__title">{title}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">Drama</span>
-                <span className="film-card__year">2014</span>
+                <span className="film-card__genre">{genre[0]}</span>
+                <span className="film-card__year">{year}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -60,7 +81,7 @@ function MovieDetails(): JSX.Element {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+              <img src={poster} alt={title} width="218" height="327" />
             </div>
 
             <div className="film-card__desc">
@@ -82,39 +103,26 @@ function MovieDetails(): JSX.Element {
                 <div className="film-card__text-col">
                   <p className="film-card__details-item">
                     <strong className="film-card__details-name">Director</strong>
-                    <span className="film-card__details-value">Wes Anderson</span>
+                    <span className="film-card__details-value">{director}</span>
                   </p>
                   <p className="film-card__details-item">
                     <strong className="film-card__details-name">Starring</strong>
-                    <span className="film-card__details-value">
-                      Bill Murray, <br />
-                      Edward Norton, <br />
-                      Jude Law, <br />
-                      Willem Dafoe, <br />
-                      Saoirse Ronan, <br />
-                      Tony Revoloru, <br />
-                      Tilda Swinton, <br />
-                      Tom Wilkinson, <br />
-                      Owen Wilkinson, <br />
-                      Adrien Brody, <br />
-                      Ralph Fiennes, <br />
-                      Jeff Goldblum
-                    </span>
+                    <span className="film-card__details-value">{actors.join(', ')}</span>
                   </p>
                 </div>
 
                 <div className="film-card__text-col">
                   <p className="film-card__details-item">
                     <strong className="film-card__details-name">Run Time</strong>
-                    <span className="film-card__details-value">1h 39m</span>
+                    <span className="film-card__details-value">{runtime}</span>
                   </p>
                   <p className="film-card__details-item">
                     <strong className="film-card__details-name">Genre</strong>
-                    <span className="film-card__details-value">Comedy</span>
+                    <span className="film-card__details-value">{genre[0]}</span>
                   </p>
                   <p className="film-card__details-item">
                     <strong className="film-card__details-name">Released</strong>
-                    <span className="film-card__details-value">2014</span>
+                    <span className="film-card__details-value">{year}</span>
                   </p>
                 </div>
               </div>
@@ -128,9 +136,7 @@ function MovieDetails(): JSX.Element {
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__films-list">
-            {
-              new Array(FILM_CARD_AMOUNT).fill(null).map((item, index) => item = index).map((item) => <FilmCard key={item} />)
-            }
+            <MovieList films={films.slice(0, FILM_CARD_AMOUNT)} handleClick={handleClick} handleHover={null}/>
           </div>
         </section>
 

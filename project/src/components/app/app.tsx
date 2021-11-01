@@ -1,49 +1,58 @@
 import {Switch, Route, BrowserRouter} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../const';
+import {useState} from 'react';
+import {FilmDataType} from '../../types/films';
+import {APP_ROUTE, AUTHORIZATION_STATUS} from '../../const';
 import MainScreen from '../main-screen/main-screen';
+import MovieInList from '../movie-in-list/movie-in-list';
 import SignIn from '../sign-in/sign-in';
 import MyList from '../my-list/my-list';
-import MovieInList from '../movie-in-list/movie-in-list';
 import AddReview from '../add-review/add-review';
 import Player from '../player/player';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route/private-route';
 
-type PromoFilmProps = {
-  title: string,
-  genre: string,
-  year: number,
+type AppProps = {
+  films: FilmDataType[];
 }
 
-function App({title, genre, year}: PromoFilmProps): JSX.Element {
+function App({films}: AppProps): JSX.Element {
+  const [activeClickFilm, setActiveClickFilm] = useState(films[0]);
+
+  const handleClick = (newActiveClickFilm: FilmDataType) => {
+    setActiveClickFilm(newActiveClickFilm);
+  };
+
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path={AppRoute.Main}>
+        <Route exact path={APP_ROUTE.MAIN}>
           <MainScreen
-            title = {title}
-            genre = {genre}
-            year = {year}
+            films = {films}
+            handleClick = {handleClick}
           />
         </Route>
-        <Route exact path={AppRoute.SignIn}>
+        <Route exact path={APP_ROUTE.SIGN_IN}>
           <SignIn />
         </Route>
         <PrivateRoute
           exact
-          path={AppRoute.MyList}
-          render={() => <MyList />}
-          authorizationStatus={AuthorizationStatus.NoAuth}
+          path={APP_ROUTE.MY_LIST}
+          render={() => <MyList films = {films} handleClick={handleClick} />}
+          authorizationStatus={AUTHORIZATION_STATUS.NO_AUTH}
         >
         </PrivateRoute>
-        <Route exact path={AppRoute.Film}>
-          <MovieInList />
+        <Route exact path={APP_ROUTE.FILM}>
+          <MovieInList
+            films={films}
+            film={activeClickFilm}
+            handleClick = {handleClick}
+          />
         </Route>
-        <Route exact path={AppRoute.AddReview}>
-          <AddReview />
+        <Route exact path={APP_ROUTE.ADD_REVIEW}>
+          <AddReview film={films[0]}/>
         </Route>
-        <Route exact path={AppRoute.Player}>
-          <Player />
+        <Route exact path={APP_ROUTE.PLAYER}>
+          <Player film={films[0]}/>
         </Route>
         <Route>
           <NotFoundScreen />

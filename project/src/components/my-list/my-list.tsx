@@ -1,9 +1,15 @@
-import FilmCard from '../film-card/film-card';
+import {FilmDataType} from '../../types/films';
 import Logo from '../logo/logo';
+import MovieList from '../movie-list/movie-list';
 
 const FILM_CARD_AMOUNT = 9;
 
-function MyList(): JSX.Element {
+type MyListProps = {
+  films: FilmDataType[];
+  handleClick: (newActiveClickFilm: FilmDataType) => void;
+}
+
+function MyList({films, handleClick}: MyListProps): JSX.Element {
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -27,10 +33,7 @@ function MyList(): JSX.Element {
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
         <div className="catalog__films-list">
-          {
-            new Array(FILM_CARD_AMOUNT).fill(null).map((item, index) => item = index).map((item) => <FilmCard key={item} />)
-          }
-
+          <MovieList films={films.slice(0, FILM_CARD_AMOUNT)} handleClick={handleClick} handleHover={null}/>
         </div>
       </section>
 
