@@ -108,7 +108,7 @@ function MainScreen({films, handleClick}: MainScreenProps): JSX.Element {
           </ul>
 
           <div className="catalog__films-list">
-            <MovieList films={films} handleClick={handleClick} handleHover={handleHover}/>
+            <MovieList films={films} handleClick={handleClick} handleHover={handleHover} hasVideoPreview/>
           </div>
 
           <div className="catalog__more">
