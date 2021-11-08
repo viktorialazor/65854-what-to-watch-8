@@ -1,9 +1,9 @@
 import {Switch, Route, BrowserRouter} from 'react-router-dom';
 import {useState} from 'react';
 import {FilmDataType} from '../../types/films';
-import {APP_ROUTE, AUTHORIZATION_STATUS} from '../../const';
+import {APP_ROUTE, AUTHORIZATION_STATUS, TAB_LIST} from '../../const';
 import MainScreen from '../main-screen/main-screen';
-import MovieInList from '../movie-in-list/movie-in-list';
+import MoviePage from '../movie-page/movie-page';
 import SignIn from '../sign-in/sign-in';
 import MyList from '../my-list/my-list';
 import AddReview from '../add-review/add-review';
@@ -17,9 +17,15 @@ type AppProps = {
 
 function App({films}: AppProps): JSX.Element {
   const [activeClickFilm, setActiveClickFilm] = useState(films[0]);
+  const [activeTab, setActiveTab] = useState(TAB_LIST[0]);
 
   const handleClick = (newActiveClickFilm: FilmDataType) => {
     setActiveClickFilm(newActiveClickFilm);
+    setActiveTab(TAB_LIST[0]);
+  };
+
+  const getActiveTab = (tab: string): void => {
+    setActiveTab(tab);
   };
 
   return (
@@ -42,7 +48,10 @@ function App({films}: AppProps): JSX.Element {
         >
         </PrivateRoute>
         <Route exact path={APP_ROUTE.FILM}>
-          <MovieInList
+          <MoviePage
+            tabList={TAB_LIST}
+            activeTab={activeTab}
+            getActiveTab={getActiveTab}
             films={films}
             film={activeClickFilm}
             handleClick = {handleClick}

@@ -1306,6 +1306,8 @@ main {
 .small-film-card__image {
   position: relative;
   z-index: 1;
+  display: flex;
+  justify-content: center;
   height: 175px; }
   .small-film-card__image::after {
     content: '';
