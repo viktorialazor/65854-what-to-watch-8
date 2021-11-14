@@ -1,35 +1,35 @@
 import {FilmDataType} from './films';
 
-export enum ActionType {
-  ChangeActiveGenre = 'film/changeActiveGenre',
-  FilmListByGenre = 'film/filmListByGenre',
-  FilmActive = 'film/filmActive',
-  IncrementFilmCount = 'film/incrementFilmCount',
-  ResetFilmCount = 'film/resetFilmCount',
-}
+export const ActionType = {
+  ChangeActiveGenre: 'film/changeActiveGenre',
+  FilmListByGenre: 'film/filmListByGenre',
+  FilmActive: 'film/filmActive',
+  IncrementFilmCount: 'film/incrementFilmCount',
+  ResetFilmCount: 'film/resetFilmCount',
+};
 
 export type ChangeActiveGenreAction = {
-  type: ActionType.ChangeActiveGenre;
+  type: typeof ActionType.ChangeActiveGenre;
   payload: string,
 };
 
 export type FilmListByGenreAction = {
-  type: ActionType.FilmListByGenre;
+  type: typeof ActionType.FilmListByGenre;
   payload: FilmDataType[],
 };
 
 export type FilmActiveAction = {
-  type: ActionType.FilmActive;
+  type: typeof ActionType.FilmActive;
   payload: FilmDataType,
 };
 
 export type IncrementFilmCountAction = {
-  type: ActionType.IncrementFilmCount;
+  type: typeof ActionType.IncrementFilmCount;
   payload: number;
 };
 
 export type ResetFilmCountAction = {
-  type: ActionType.ResetFilmCount;
+  type: typeof ActionType.ResetFilmCount;
   payload: number;
 };
 
