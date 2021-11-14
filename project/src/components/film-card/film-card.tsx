@@ -6,11 +6,11 @@ import VideoPlayer from '../video-player/video-player';
 type FilmCardProps = {
   film: FilmDataType;
   handleClick: (movieState: FilmDataType) => void;
-  handleHover: ((movieState: FilmDataType) => void) | null;
+  onHoverFilmCard: ((film: FilmDataType) => void) | null;
   hasVideoPreview?: boolean;
 }
 
-function FilmCard({film, handleClick, handleHover, hasVideoPreview = false}: FilmCardProps): JSX.Element {
+function FilmCard({film, handleClick, onHoverFilmCard, hasVideoPreview = false}: FilmCardProps): JSX.Element {
   const {
     id,
     image,
@@ -32,7 +32,7 @@ function FilmCard({film, handleClick, handleHover, hasVideoPreview = false}: Fil
   const actualTeg = getActualTeg(hasVideoPreview);
 
   return (
-    <article onMouseEnter={() => {if(handleHover !== null) {handleHover(film);} hoverMouseCardHandler();}} onMouseLeave={() => {hoverMouseCardHandler();}} className="small-film-card catalog__films-card">
+    <article onMouseEnter={() => {if(onHoverFilmCard !== null) {onHoverFilmCard(film);} hoverMouseCardHandler();}} onMouseLeave={() => {hoverMouseCardHandler();}} className="small-film-card catalog__films-card">
       <div className="small-film-card__image">
         {actualTeg}
       </div>

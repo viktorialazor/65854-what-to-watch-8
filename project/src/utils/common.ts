@@ -1,3 +1,4 @@
+import {FilmDataType} from '../types/films';
 import {REVIEWS_TEXT, YEAR, MAX_MONTH_GAP, MAX_DAYS_GAP, MAX_HOURS_GAP, MAX_MINUTES_GAP, REVIEWS_AUTHORS, MINUTES_IN_HOUR} from '../const';
 
 export const getRandomInteger = (from = 0, to = 1): number => {
@@ -139,4 +140,21 @@ export const getActorList = (actors: string[]): string => {
   });
 
   return actorsList;
+};
+
+export const getSortFilmList = (films: FilmDataType[], genre: string):FilmDataType[] =>  {
+
+  let sortFilmList: FilmDataType[] = [];
+  if (genre === 'All genres') {
+    sortFilmList = films.slice();
+  } else {films.forEach((filmItem) => {
+    filmItem.genre.forEach((genreItem) => {
+      if(genreItem === genre) {
+        sortFilmList.push(filmItem);
+      }
+    });
+  });
+  }
+
+  return sortFilmList;
 };

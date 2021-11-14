@@ -18,6 +18,7 @@ type AppProps = {
 function App({films}: AppProps): JSX.Element {
   const [activeClickFilm, setActiveClickFilm] = useState(films[0]);
   const [activeTab, setActiveTab] = useState(TAB_LIST[0]);
+  const filmDefault: FilmDataType = films[0];
 
   const handleClick = (newActiveClickFilm: FilmDataType) => {
     setActiveClickFilm(newActiveClickFilm);
@@ -33,8 +34,8 @@ function App({films}: AppProps): JSX.Element {
       <Switch>
         <Route exact path={APP_ROUTE.MAIN}>
           <MainScreen
-            films = {films}
             handleClick = {handleClick}
+            filmDefault = {filmDefault}
           />
         </Route>
         <Route exact path={APP_ROUTE.SIGN_IN}>

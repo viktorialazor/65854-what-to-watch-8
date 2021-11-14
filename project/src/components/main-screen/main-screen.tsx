@@ -1,19 +1,54 @@
-import React, {useState} from 'react';
+import React from 'react';
+import {connect, ConnectedProps} from 'react-redux';
+import {State} from '../../types/state';
+import {filmActive, incrementFilmCount} from '../../store/action';
 import {FilmDataType} from '../../types/films';
 import Logo from '../logo/logo';
 import MovieList from '../movie-list/movie-list';
+import GenresList from '../genres-list/genres-list';
+import ShowMore from '../show-more/show-more';
+import {Dispatch} from 'redux';
+import {Actions} from '../../types/action';
 
 type MainScreenProps = {
-  films: FilmDataType[];
   handleClick: (newActiveClickFilm: FilmDataType) => void;
+  filmDefault: FilmDataType;
 }
 
-function MainScreen({films, handleClick}: MainScreenProps): JSX.Element {
-  const [activeFilm, setActiveFilm] = useState(films[0]);
+const mapStateToProps = ({filmList, film, filmCount}: State) => ({
+  filmList,
+  film,
+  filmCount,
+});
 
-  const handleHover = (newActiveFilm: FilmDataType) => {
-    setActiveFilm(() => newActiveFilm);
+const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
+  onClickShowMore(count: number) {
+    dispatch(incrementFilmCount(count));
+  },
+  onHoverFilmCard(film: FilmDataType) {
+    dispatch(filmActive(film));
+  },
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & MainScreenProps;
+
+function MainScreen(props: ConnectedComponentProps): JSX.Element {
+  const {handleClick, filmDefault, filmCount, filmList, film, onClickShowMore, onHoverFilmCard} = props;
+
+  const getShowMoreButton = (films: FilmDataType[], count: number): JSX.Element | null => {
+    if (films.length > count) {
+      return <ShowMore onClickShowMore={onClickShowMore}/>;
+    }
+    return null;
   };
+
+  const getFilmList = (films: FilmDataType[], count: number): FilmDataType[] => films.slice(0, count);
+
+  const filmsForShow: FilmDataType[] = getFilmList(filmList, filmCount);
+  const activeFilm: FilmDataType = film ? film : filmDefault;
 
   return (
     <React.Fragment>
@@ -74,45 +109,14 @@ function MainScreen({films, handleClick}: MainScreenProps): JSX.Element {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          <ul className="catalog__genres-list">
-            <li className="catalog__genres-item catalog__genres-item--active">
-              <a href="/" className="catalog__genres-link">All genres</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Comedies</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Crime</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Documentary</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Dramas</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Horror</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Kids & Family</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Romance</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Sci-Fi</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="/" className="catalog__genres-link">Thrillers</a>
-            </li>
-          </ul>
+          <GenresList onHoverFilmCard={onHoverFilmCard}/>
 
           <div className="catalog__films-list">
-            <MovieList films={films} handleClick={handleClick} handleHover={handleHover} hasVideoPreview/>
+            <MovieList films={filmsForShow} handleClick={handleClick} onHoverFilmCard={onHoverFilmCard} hasVideoPreview/>
           </div>
 
           <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
+            {getShowMoreButton(filmList, filmCount)}
           </div>
         </section>
 
@@ -134,4 +138,5 @@ function MainScreen({films, handleClick}: MainScreenProps): JSX.Element {
   );
 }
 
-export default MainScreen;
+export {MainScreen};
+export default connector(MainScreen);

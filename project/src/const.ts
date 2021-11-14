@@ -45,3 +45,6 @@ export const MAX_HOURS_GAP = 24;
 export const MAX_MINUTES_GAP = 60;
 export const MINUTES_IN_HOUR = 60;
 export const TAB_LIST: string[] = ['Overview', 'Details', 'Reviews'];
+export const ACTIVE_GENRE = 'All genres';
+export const FILM_COUNT = 8;
+

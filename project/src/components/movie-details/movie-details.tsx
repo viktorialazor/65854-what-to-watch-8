@@ -6,6 +6,14 @@ type MovieDetailsProps = {
   film: FilmDataType;
 }
 
+const getActorsList = (actor: string, actorNumber: number, actorsAmount: number): JSX.Element => {
+  if (actorNumber !== actorsAmount - 1) {
+    return (<React.Fragment> {actor} <br /> </React.Fragment>);
+  } else {
+    return (<React.Fragment> {actor} </React.Fragment>);
+  }
+};
+
 function MovieDetails({film}: MovieDetailsProps): JSX.Element {
   const {
     genre,
@@ -26,7 +34,7 @@ function MovieDetails({film}: MovieDetailsProps): JSX.Element {
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Starring</strong>
-          <span className="film-card__details-value">{actors.join(', ')}</span>
+          <span className="film-card__details-value">{actors.map((item, index,array) => getActorsList(item, index, array.length))}</span>
         </p>
       </div>
 
