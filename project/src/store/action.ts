@@ -1,19 +1,8 @@
-import {ActionType, ChangeActiveGenreAction, FilmListByGenreAction, FilmActiveAction, IncrementFilmCountAction, ResetFilmCountAction} from '../types/action';
-import {FilmDataType} from '../types/films';
+import {ActionType, genreListPayload, ChangeActiveGenreAction, IncrementFilmCountAction, ResetFilmCountAction} from '../types/action';
 
-export const changeActiveGenre = (genre: string): ChangeActiveGenreAction => ({
+export const changeActiveGenre = (genrePayload: genreListPayload): ChangeActiveGenreAction => ({
   type: ActionType.ChangeActiveGenre,
-  payload: genre,
-});
-
-export const filmListByGenre = (filmList: FilmDataType[]): FilmListByGenreAction => ({
-  type: ActionType.FilmListByGenre,
-  payload: filmList,
-});
-
-export const filmActive = (film: FilmDataType): FilmActiveAction => ({
-  type: ActionType.FilmActive,
-  payload: film,
+  payload: genrePayload,
 });
 
 export const incrementFilmCount = (count: number): IncrementFilmCountAction => ({

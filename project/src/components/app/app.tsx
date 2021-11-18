@@ -13,12 +13,12 @@ import PrivateRoute from '../private-route/private-route';
 
 type AppProps = {
   films: FilmDataType[];
+  filmPromo: FilmDataType;
 }
 
-function App({films}: AppProps): JSX.Element {
+function App({films, filmPromo}: AppProps): JSX.Element {
   const [activeClickFilm, setActiveClickFilm] = useState(films[0]);
   const [activeTab, setActiveTab] = useState(TAB_LIST[0]);
-  const filmDefault: FilmDataType = films[0];
 
   const handleClick = (newActiveClickFilm: FilmDataType) => {
     setActiveClickFilm(newActiveClickFilm);
@@ -35,7 +35,7 @@ function App({films}: AppProps): JSX.Element {
         <Route exact path={APP_ROUTE.MAIN}>
           <MainScreen
             handleClick = {handleClick}
-            filmDefault = {filmDefault}
+            filmPromo = {filmPromo}
           />
         </Route>
         <Route exact path={APP_ROUTE.SIGN_IN}>

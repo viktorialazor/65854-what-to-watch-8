@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import {State} from '../../types/state';
-import {filmActive, incrementFilmCount} from '../../store/action';
+import {incrementFilmCount} from '../../store/action';
 import {FilmDataType} from '../../types/films';
 import Logo from '../logo/logo';
 import MovieList from '../movie-list/movie-list';
@@ -12,21 +12,17 @@ import {Actions} from '../../types/action';
 
 type MainScreenProps = {
   handleClick: (newActiveClickFilm: FilmDataType) => void;
-  filmDefault: FilmDataType;
+  filmPromo: FilmDataType;
 }
 
-const mapStateToProps = ({filmList, film, filmCount}: State) => ({
-  filmList,
-  film,
+const mapStateToProps = ({genrePayload, filmCount}: State) => ({
+  genrePayload,
   filmCount,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
   onClickShowMore(count: number) {
     dispatch(incrementFilmCount(count));
-  },
-  onHoverFilmCard(film: FilmDataType) {
-    dispatch(filmActive(film));
   },
 });
 
@@ -36,7 +32,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & MainScreenProps;
 
 function MainScreen(props: ConnectedComponentProps): JSX.Element {
-  const {handleClick, filmDefault, filmCount, filmList, film, onClickShowMore, onHoverFilmCard} = props;
+  const {handleClick, filmPromo, filmCount, genrePayload, onClickShowMore} = props;
+  const {filmList} = genrePayload;
 
   const getShowMoreButton = (films: FilmDataType[], count: number): JSX.Element | null => {
     if (films.length > count) {
@@ -48,13 +45,12 @@ function MainScreen(props: ConnectedComponentProps): JSX.Element {
   const getFilmList = (films: FilmDataType[], count: number): FilmDataType[] => films.slice(0, count);
 
   const filmsForShow: FilmDataType[] = getFilmList(filmList, filmCount);
-  const activeFilm: FilmDataType = film ? film : filmDefault;
 
   return (
     <React.Fragment>
       <section className="film-card">
         <div className="film-card__bg">
-          <img src={activeFilm.background} alt={activeFilm.title} />
+          <img src={filmPromo.background} alt={filmPromo.title} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -77,14 +73,14 @@ function MainScreen(props: ConnectedComponentProps): JSX.Element {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src={activeFilm.poster} alt={activeFilm.title} width="218" height="327" />
+              <img src={filmPromo.poster} alt={filmPromo.title} width="218" height="327" />
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{activeFilm.title}</h2>
+              <h2 className="film-card__title">{filmPromo.title}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{activeFilm.genre[0]}</span>
-                <span className="film-card__year">{activeFilm.year}</span>
+                <span className="film-card__genre">{filmPromo.genre[0]}</span>
+                <span className="film-card__year">{filmPromo.year}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -109,10 +105,10 @@ function MainScreen(props: ConnectedComponentProps): JSX.Element {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          <GenresList onHoverFilmCard={onHoverFilmCard}/>
+          <GenresList />
 
           <div className="catalog__films-list">
-            <MovieList films={filmsForShow} handleClick={handleClick} onHoverFilmCard={onHoverFilmCard} hasVideoPreview/>
+            <MovieList films={filmsForShow} handleClick={handleClick}/>
           </div>
 
           <div className="catalog__more">

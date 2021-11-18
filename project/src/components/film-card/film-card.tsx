@@ -7,10 +7,10 @@ type FilmCardProps = {
   film: FilmDataType;
   handleClick: (movieState: FilmDataType) => void;
   onHoverFilmCard: ((film: FilmDataType) => void) | null;
-  hasVideoPreview?: boolean;
+  activeFilm: FilmDataType;
 }
 
-function FilmCard({film, handleClick, onHoverFilmCard, hasVideoPreview = false}: FilmCardProps): JSX.Element {
+function FilmCard({film, handleClick, onHoverFilmCard, activeFilm}: FilmCardProps): JSX.Element {
   const {
     id,
     image,
@@ -22,14 +22,14 @@ function FilmCard({film, handleClick, onHoverFilmCard, hasVideoPreview = false}:
 
   const hoverMouseCardHandler = () => {setIsPlaying(!isPlaying);};
 
-  const getActualTeg = (isVideoPreview: boolean): JSX.Element => {
-    if (isVideoPreview) {
+  const getActualTeg = (cardWithVideo: FilmDataType): JSX.Element => {
+    if (cardWithVideo.id === film.id) {
       return <VideoPlayer src={srcPreviewVideo} image={image} isSoundActive={false} isPlaying={isPlaying}/>;
     }
     return <img src={image} alt={title} width="280" height="175" />;
   };
 
-  const actualTeg = getActualTeg(hasVideoPreview);
+  const actualTeg = getActualTeg(activeFilm);
 
   return (
     <article onMouseEnter={() => {if(onHoverFilmCard !== null) {onHoverFilmCard(film);} hoverMouseCardHandler();}} onMouseLeave={() => {hoverMouseCardHandler();}} className="small-film-card catalog__films-card">

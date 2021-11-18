@@ -188,4 +188,25 @@ const films: FilmDataType[] = [
   },
 ];
 
+export const filmPromo: FilmDataType =
+{
+  id: nanoid(),
+  background: 'img/bg-aviator.jpg',
+  poster: 'img/aviator-poster.jpg',
+  image: 'img/aviator.jpg',
+  title: 'The Aviator',
+  genre: ['Biography', 'Dramas'],
+  year: 2004,
+  description: generateDescription(),
+  rating: getRandomFloat(RATING_MIN, RATING_MAX),
+  votes: getRandomInteger(VOTES_MIN, VOTES_MAX),
+  director: 'Martin Scorsese',
+  actors: ['Leonardo DiCaprio', 'Cate Blanchett', 'Kate Beckinsale'],
+  duration: 170,
+  isFavorite: false,
+  reviews: Reviews[0],
+  srcFullVideo: 'video/example-video.mkv',
+  srcPreviewVideo: 'video/example-video.mkv',
+};
+
 export default films;

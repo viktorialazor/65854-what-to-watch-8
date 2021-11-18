@@ -1,8 +1,9 @@
 import {FilmDataType} from '../types/films';
 
 export type State = {
-  activeGenre: string,
-  filmList: FilmDataType[],
-  film: FilmDataType,
+  genrePayload: {
+    genre: string,
+    filmList: FilmDataType[],
+  },
   filmCount: number
 };
