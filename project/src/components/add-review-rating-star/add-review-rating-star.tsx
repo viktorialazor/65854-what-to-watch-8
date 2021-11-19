@@ -2,14 +2,15 @@ import React from 'react';
 
 type AddReviewRatingStarProps = {
   id: number;
+  isChecked: boolean;
   handleRatingChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function AddReviewRatingStar({id, handleRatingChange}: AddReviewRatingStarProps): JSX.Element {
+function AddReviewRatingStar({id, isChecked, handleRatingChange}: AddReviewRatingStarProps): JSX.Element {
   return (
     <React.Fragment>
-      <input onChange={handleRatingChange} className="rating__input" id={`star-${id + 1}`} type="radio" name="rating" value={`${id + 1}`}/>
-      <label className="rating__label" htmlFor={`star-${id + 1}`}>{`Rating ${id + 1}`}</label>
+      <input onChange={handleRatingChange} className="rating__input" checked={isChecked} id={`star-${id}`} type="radio" name="rating" value={id}/>
+      <label className="rating__label" htmlFor={`star-${id}`}>{`Rating ${id}`}</label>
     </React.Fragment>
   );
 }

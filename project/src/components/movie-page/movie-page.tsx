@@ -113,7 +113,7 @@ function MoviePage({tabList, activeTab, getActiveTab, films, film, handleClick}:
           <h2 className="catalog__title">More like this</h2>
 
           <div className="catalog__films-list">
-            <MovieList films={films.slice(0, FILM_CARD_AMOUNT)} handleClick={handleClick} handleHover={null}/>
+            <MovieList films={films.slice(0, FILM_CARD_AMOUNT)} handleClick={handleClick} />
           </div>
         </section>
 

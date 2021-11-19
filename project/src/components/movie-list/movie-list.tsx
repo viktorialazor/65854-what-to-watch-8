@@ -1,19 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {FilmDataType} from '../../types/films';
 import FilmCard from '../film-card/film-card';
 
 type MovieListProps = {
   films: FilmDataType[];
   handleClick: (newActiveClickFilm: FilmDataType) => void;
-  handleHover: ((newActiveFilm: FilmDataType) => void) | null;
-  hasVideoPreview?: boolean;
 };
 
-function MovieList({films, handleClick, handleHover, hasVideoPreview = false}: MovieListProps): JSX.Element {
+function MovieList({films, handleClick}: MovieListProps): JSX.Element {
+  const [activeFilm, setActiveFilm] = useState(films[0]);
+
+  const handleHover = (newActiveFilm: FilmDataType) => {
+    setActiveFilm(newActiveFilm);
+  };
+
   return (
     <React.Fragment>
       {
-        films.map((item) => <FilmCard key={item.id} film={item} handleClick={handleClick} handleHover={handleHover} hasVideoPreview={hasVideoPreview}/>)
+        films.map((item) => <FilmCard key={item.id} film={item} handleClick={handleClick} onHoverFilmCard={handleHover} activeFilm={activeFilm}/>)
       }
     </React.Fragment>
   );

@@ -33,7 +33,7 @@ function MyList({films, handleClick}: MyListProps): JSX.Element {
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
         <div className="catalog__films-list">
-          <MovieList films={films.slice(0, FILM_CARD_AMOUNT)} handleClick={handleClick} handleHover={null}/>
+          <MovieList films={films.slice(0, FILM_CARD_AMOUNT)} handleClick={handleClick} />
         </div>
       </section>
 

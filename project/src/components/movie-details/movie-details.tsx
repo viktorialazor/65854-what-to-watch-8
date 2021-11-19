@@ -26,7 +26,7 @@ function MovieDetails({film}: MovieDetailsProps): JSX.Element {
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Starring</strong>
-          <span className="film-card__details-value">{actors.join(', ')}</span>
+          <span className="film-card__details-value">{actors.map((item) => <React.Fragment key={item}> {item} <br /> </React.Fragment>)}</span>
         </p>
       </div>
 

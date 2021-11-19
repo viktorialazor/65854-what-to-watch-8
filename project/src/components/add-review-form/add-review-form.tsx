@@ -3,12 +3,16 @@ import {RATING_STAR_AMOUNT} from '../../const';
 import AddReviewRatingStar from '../add-review-rating-star/add-review-rating-star';
 
 function AddReviewForm(): JSX.Element {
-  const [formData, setFormData] = useState({raiting: '', text: ''});
+  const [formData, setFormData] = useState({rating: '', text: ''});
+  const [starChecked, setStarChecked] = useState(8);
+
+  const ratingStarts = new Array(RATING_STAR_AMOUNT).fill(null);
 
   const handleRatingChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setStarChecked(Number(evt.target.value));
     setFormData({
       ...formData,
-      raiting: evt.target.value,
+      rating: evt.target.value,
     });
   };
 
@@ -24,7 +28,7 @@ function AddReviewForm(): JSX.Element {
       <div className="rating">
         <div className="rating__stars">
           {
-            new Array(RATING_STAR_AMOUNT).fill(null).map((item, index) => item = index).map((item, index) => <AddReviewRatingStar  key={item} id={index + 1} handleRatingChange={handleRatingChange}/>)
+            ratingStarts.map((item, index) => <AddReviewRatingStar  key={item} id={RATING_STAR_AMOUNT - index} isChecked={starChecked === RATING_STAR_AMOUNT - index} handleRatingChange={handleRatingChange}/>)
           }
         </div>
       </div>
