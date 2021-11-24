@@ -1,7 +1,11 @@
-import {Switch, Route, BrowserRouter} from 'react-router-dom';
+import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
 import {useState} from 'react';
+import browserHistory from '../../browser-history';
+import {connect, ConnectedProps} from 'react-redux';
+import {State} from '../../types/state';
 import {FilmDataType} from '../../types/films';
-import {APP_ROUTE, AUTHORIZATION_STATUS, TAB_LIST} from '../../const';
+import {AUTHORIZATION_STATUS, APP_ROUTE, TAB_LIST, emptyFilm} from '../../const';
+import {isCheckedAuth} from '../../utils/common';
 import MainScreen from '../main-screen/main-screen';
 import MoviePage from '../movie-page/movie-page';
 import SignIn from '../sign-in/sign-in';
@@ -10,15 +14,28 @@ import AddReview from '../add-review/add-review';
 import Player from '../player/player';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route/private-route';
+import LoadingScreen from '../loading-screen/loading-screen';
 
-type AppProps = {
-  films: FilmDataType[];
-  filmPromo: FilmDataType;
-}
+const mapStateToProps = ({authorizationStatus, isDataLoaded, films}: State) => ({
+  films,
+  authorizationStatus,
+  isDataLoaded,
+});
 
-function App({films, filmPromo}: AppProps): JSX.Element {
-  const [activeClickFilm, setActiveClickFilm] = useState(films[0]);
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function App(props: PropsFromRedux): JSX.Element {
+  const {films, authorizationStatus, isDataLoaded} = props;
+  const [activeClickFilm, setActiveClickFilm] = useState(emptyFilm);
   const [activeTab, setActiveTab] = useState(TAB_LIST[0]);
+
+  if (isCheckedAuth(authorizationStatus) || !isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   const handleClick = (newActiveClickFilm: FilmDataType) => {
     setActiveClickFilm(newActiveClickFilm);
@@ -29,23 +46,30 @@ function App({films, filmPromo}: AppProps): JSX.Element {
     setActiveTab(tab);
   };
 
+  const getLink = (): JSX.Element => {
+    if (authorizationStatus === AUTHORIZATION_STATUS.AUTH) {
+      return <MainScreen handleClick = {handleClick} />;
+    }
+    return <SignIn />;
+  };
+
+  const link = getLink();
+
   return (
-    <BrowserRouter>
+    <BrowserRouter history={browserHistory}>
       <Switch>
         <Route exact path={APP_ROUTE.MAIN}>
           <MainScreen
             handleClick = {handleClick}
-            filmPromo = {filmPromo}
           />
         </Route>
         <Route exact path={APP_ROUTE.SIGN_IN}>
-          <SignIn />
+          {link}
         </Route>
         <PrivateRoute
           exact
           path={APP_ROUTE.MY_LIST}
-          render={() => <MyList films = {films} handleClick={handleClick} />}
-          authorizationStatus={AUTHORIZATION_STATUS.NO_AUTH}
+          render={() => <MyList handleClick={handleClick} />}
         >
         </PrivateRoute>
         <Route exact path={APP_ROUTE.FILM}>
@@ -53,14 +77,16 @@ function App({films, filmPromo}: AppProps): JSX.Element {
             tabList={TAB_LIST}
             activeTab={activeTab}
             getActiveTab={getActiveTab}
-            films={films}
-            film={activeClickFilm}
+            id={activeClickFilm.id}
             handleClick = {handleClick}
           />
         </Route>
-        <Route exact path={APP_ROUTE.ADD_REVIEW}>
-          <AddReview film={films[0]}/>
-        </Route>
+        <PrivateRoute
+          exact
+          path={APP_ROUTE.ADD_REVIEW}
+          render={({history}) => <AddReview onBackToMovie={() => history.push(`/films/${activeClickFilm.id}`)}/>}
+        >
+        </PrivateRoute>
         <Route exact path={APP_ROUTE.PLAYER}>
           <Player film={films[0]}/>
         </Route>
@@ -72,4 +98,5 @@ function App({films, filmPromo}: AppProps): JSX.Element {
   );
 }
 
-export default App;
+export {App};
+export default connector(App);

@@ -1,5 +1,6 @@
 import React from 'react';
 import {FilmReviewType} from '../../types/films';
+import {humanizeDate} from '../../utils/common';
 
 type MovieReviewProps = {
   review: FilmReviewType,
@@ -7,20 +8,23 @@ type MovieReviewProps = {
 
 function MovieReview({review}: MovieReviewProps): JSX.Element {
   const {
-    text,
+    comment,
     rating,
-    author,
+    user,
     date,
   } = review;
+
+  const dateComment = humanizeDate(date);
+  const author = user.name;
 
   return (
     <div className="review">
       <blockquote className="review__quote">
-        <p className="review__text">{text}</p>
+        <p className="review__text">{comment}</p>
 
         <footer className="review__details">
           <cite className="review__author">{author}</cite>
-          <time className="review__date" dateTime="2016-12-24">{date}</time>
+          <time className="review__date" dateTime="2016-12-24">{dateComment}</time>
         </footer>
       </blockquote>
 

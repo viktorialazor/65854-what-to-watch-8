@@ -1,9 +1,36 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
+import {connect, ConnectedProps} from 'react-redux';
+import {Link} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import {State} from '../../types/state';
+import {ThunkAppDispatch} from '../../types/action';
+import {setFormLockType} from '../../types/films';
 import {RATING_STAR_AMOUNT} from '../../const';
+import {addCommentAction, fetchCommentsAction} from '../../store/api-actions';
 import AddReviewRatingStar from '../add-review-rating-star/add-review-rating-star';
 
-function AddReviewForm(): JSX.Element {
-  const [formData, setFormData] = useState({rating: '', text: ''});
+const mapStateToProps = ({film}: State) => ({
+  film,
+});
+
+const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
+  onSubmit(id: number, comment: string, rating: number, setFormLock: setFormLockType) {
+    dispatch(addCommentAction(id,{rating, comment}, setFormLock));
+    dispatch(fetchCommentsAction(id));
+  },
+});
+
+type AddReviewFormProps = {
+  onBackToMovie: () => void;
+}
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & AddReviewFormProps;
+
+function AddReviewForm({film, onSubmit, onBackToMovie}: ConnectedComponentProps): JSX.Element {
+  const [formData, setFormData] = useState({rating: 8, text: ''});
   const [starChecked, setStarChecked] = useState(8);
 
   const ratingStarts = new Array(RATING_STAR_AMOUNT).fill(null);
@@ -12,7 +39,7 @@ function AddReviewForm(): JSX.Element {
     setStarChecked(Number(evt.target.value));
     setFormData({
       ...formData,
-      rating: evt.target.value,
+      rating: Number(evt.target.value),
     });
   };
 
@@ -23,20 +50,42 @@ function AddReviewForm(): JSX.Element {
     });
   };
 
+  const divRef = useRef<HTMLDivElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const setFormLock = (isSend: boolean) => {
+    if (isSend) {
+      divRef.current?.classList.add('disabled');
+      textareaRef.current?.classList.add('disabled');
+    } else {
+      divRef.current?.classList.remove('disabled');
+      textareaRef.current?.classList.remove('disabled');
+    }
+  };
+
+  const handleSubmit = () => {
+    if (film?.id !== undefined && (formData.text.length > 50 && formData.text.length < 400) && formData.rating !== 0) {
+      onSubmit(film?.id, formData.text, formData.rating, setFormLock);
+      onBackToMovie();
+    } else {
+      toast.info('Введите комментарий (50 - 400 символов)');
+    }
+  };
+
   return (
-    <form action="#" className="add-review__form">
+    <form action="" className="add-review__form">
       <div className="rating">
-        <div className="rating__stars">
+        <div ref={divRef} className="rating__stars">
           {
-            ratingStarts.map((item, index) => <AddReviewRatingStar  key={item} id={RATING_STAR_AMOUNT - index} isChecked={starChecked === RATING_STAR_AMOUNT - index} handleRatingChange={handleRatingChange}/>)
+            ratingStarts.map((item, index) => item = index).map((item, index) => <AddReviewRatingStar  key={item} id={RATING_STAR_AMOUNT - index} isChecked={starChecked === RATING_STAR_AMOUNT - index} handleRatingChange={handleRatingChange}/>)
           }
         </div>
       </div>
 
       <div className="add-review__text">
-        <textarea onChange={handleTextChange} className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text"></textarea>
+        <textarea ref={textareaRef} onChange={handleTextChange} className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text"></textarea>
         <div className="add-review__submit">
-          <button className="add-review__btn" type="submit">Post</button>
+          <Link onClick={(evt) => {evt.preventDefault(); handleSubmit();}} to='/' className="add-review__btn" type="submit">Post</Link>
         </div>
 
       </div>
@@ -44,4 +93,5 @@ function AddReviewForm(): JSX.Element {
   );
 }
 
-export default AddReviewForm;
+export {AddReviewForm};
+export default connector(AddReviewForm);

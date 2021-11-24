@@ -1,15 +1,38 @@
+import {useEffect} from 'react';
+import {connect, ConnectedProps, useDispatch} from 'react-redux';
+import {State} from '../../types/state';
 import {FilmDataType} from '../../types/films';
+import {AUTHORIZATION_STATUS} from '../../const';
 import Logo from '../logo/logo';
 import MovieList from '../movie-list/movie-list';
+import SignInOut from '../sign-in-out/sign-in-out';
+import {fetchFavoriteFilmsAction} from '../../store/api-actions';
 
 const FILM_CARD_AMOUNT = 9;
 
+const mapStateToProps = ({authorizationStatus, favoriteFilms}: State) => ({
+  authorizationStatus,
+  favoriteFilms,
+});
+
 type MyListProps = {
-  films: FilmDataType[];
   handleClick: (newActiveClickFilm: FilmDataType) => void;
 }
 
-function MyList({films, handleClick}: MyListProps): JSX.Element {
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & MyListProps;
+
+function MyList({authorizationStatus, favoriteFilms, handleClick}: ConnectedComponentProps): JSX.Element {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(authorizationStatus === AUTHORIZATION_STATUS.AUTH) {
+      dispatch(fetchFavoriteFilmsAction());
+    }
+  }, [dispatch, authorizationStatus]);
+
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
@@ -17,23 +40,14 @@ function MyList({films, handleClick}: MyListProps): JSX.Element {
 
         <h1 className="page-title user-page__title">My list</h1>
 
-        <ul className="user-block">
-          <li className="user-block__item">
-            <div className="user-block__avatar">
-              <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-            </div>
-          </li>
-          <li className="user-block__item">
-            <a href="/" className="user-block__link">Sign out</a>
-          </li>
-        </ul>
+        <SignInOut />
       </header>
 
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
         <div className="catalog__films-list">
-          <MovieList films={films.slice(0, FILM_CARD_AMOUNT)} handleClick={handleClick} />
+          <MovieList films={favoriteFilms.slice(0, FILM_CARD_AMOUNT)} handleClick={handleClick} />
         </div>
       </section>
 
@@ -54,4 +68,5 @@ function MyList({films, handleClick}: MyListProps): JSX.Element {
   );
 }
 
-export default MyList;
+export {MyList};
+export default connector(MyList);

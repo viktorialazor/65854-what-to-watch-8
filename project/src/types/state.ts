@@ -1,9 +1,17 @@
-import {FilmDataType} from '../types/films';
+import {FilmReviewType, FilmDataType} from './films';
 
 export type State = {
+  films: FilmDataType[] | [],
+  favoriteFilms: FilmDataType[] | [],
+  similarFilms: FilmDataType[] | [],
+  film?: FilmDataType,
+  promoFilm: FilmDataType,
+  comments: FilmReviewType[] | [],
   genrePayload: {
     genre: string,
-    filmList: FilmDataType[],
+    filmList: FilmDataType[] | [],
   },
-  filmCount: number
+  filmCount: number,
+  authorizationStatus: string,
+  isDataLoaded: boolean,
 };
