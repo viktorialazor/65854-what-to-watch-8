@@ -1,5 +1,5 @@
 import {FilmDataType} from '../types/films';
-import {REVIEWS_TEXT, YEAR, MAX_MONTH_GAP, MAX_DAYS_GAP, MAX_HOURS_GAP, MAX_MINUTES_GAP, REVIEWS_AUTHORS, MINUTES_IN_HOUR} from '../const';
+import {REVIEWS_TEXT, YEAR, MAX_MONTH_GAP, MAX_DAYS_GAP, MAX_HOURS_GAP, MAX_MINUTES_GAP, REVIEWS_AUTHORS, MINUTES_IN_HOUR, AUTHORIZATION_STATUS} from '../const';
 
 export const getRandomInteger = (from = 0, to = 1): number => {
   const lower = Math.ceil(Math.min(from, to));
@@ -81,7 +81,10 @@ export const generateReviewDate = (): Date => {
   return new Date(currentDate);
 };
 
-export const humanizeDate = (date: Date): string =>  date.toLocaleString('en-US', {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'});
+export const humanizeDate = (date: string): string =>  {
+  const dateComment = new Date(date);
+  return dateComment.toLocaleString('en-US', {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'});
+};
 
 export const generateReviewAuthor = (): string => {
   const randomIndex = getRandomInteger(0, REVIEWS_AUTHORS.length - 1);
@@ -148,13 +151,13 @@ export const getSortFilmList = (films: FilmDataType[], genre: string):FilmDataTy
   if (genre === 'All genres') {
     sortFilmList = films.slice();
   } else {films.forEach((filmItem) => {
-    filmItem.genre.forEach((genreItem) => {
-      if(genreItem === genre) {
-        sortFilmList.push(filmItem);
-      }
-    });
+    if (filmItem.genre === genre) {
+      sortFilmList.push(filmItem);
+    }
   });
   }
-
   return sortFilmList;
 };
+
+export const isCheckedAuth = (authorizationStatus: string): boolean =>
+  authorizationStatus === AUTHORIZATION_STATUS.UNKNOWN;

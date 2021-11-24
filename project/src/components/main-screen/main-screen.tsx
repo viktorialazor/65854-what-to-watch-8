@@ -1,23 +1,25 @@
 import React from 'react';
 import {connect, ConnectedProps} from 'react-redux';
+import {Link} from 'react-router-dom';
+import {Dispatch} from 'redux';
 import {State} from '../../types/state';
-import {incrementFilmCount} from '../../store/action';
+import {Actions} from '../../types/action';
 import {FilmDataType} from '../../types/films';
+import {incrementFilmCount} from '../../store/action';
 import Logo from '../logo/logo';
 import MovieList from '../movie-list/movie-list';
 import GenresList from '../genres-list/genres-list';
 import ShowMore from '../show-more/show-more';
-import {Dispatch} from 'redux';
-import {Actions} from '../../types/action';
+import SignInOut from '../sign-in-out/sign-in-out';
 
 type MainScreenProps = {
   handleClick: (newActiveClickFilm: FilmDataType) => void;
-  filmPromo: FilmDataType;
 }
 
-const mapStateToProps = ({genrePayload, filmCount}: State) => ({
+const mapStateToProps = ({genrePayload, filmCount, promoFilm}: State) => ({
   genrePayload,
   filmCount,
+  promoFilm,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
@@ -32,7 +34,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & MainScreenProps;
 
 function MainScreen(props: ConnectedComponentProps): JSX.Element {
-  const {handleClick, filmPromo, filmCount, genrePayload, onClickShowMore} = props;
+  const {handleClick, filmCount, genrePayload, promoFilm, onClickShowMore} = props;
   const {filmList} = genrePayload;
 
   const getShowMoreButton = (films: FilmDataType[], count: number): JSX.Element | null => {
@@ -50,7 +52,7 @@ function MainScreen(props: ConnectedComponentProps): JSX.Element {
     <React.Fragment>
       <section className="film-card">
         <div className="film-card__bg">
-          <img src={filmPromo.background} alt={filmPromo.title} />
+          <img src={promoFilm.background} alt={promoFilm.title} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -58,29 +60,20 @@ function MainScreen(props: ConnectedComponentProps): JSX.Element {
         <header className="page-header film-card__head">
           <Logo />
 
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-              </div>
-            </li>
-            <li className="user-block__item">
-              <a href="/" className="user-block__link">Sign out</a>
-            </li>
-          </ul>
+          <SignInOut />
         </header>
 
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src={filmPromo.poster} alt={filmPromo.title} width="218" height="327" />
+              <img src={promoFilm.poster} alt={promoFilm.title} width="218" height="327" />
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{filmPromo.title}</h2>
+              <h2 className="film-card__title">{promoFilm.title}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{filmPromo.genre[0]}</span>
-                <span className="film-card__year">{filmPromo.year}</span>
+                <span className="film-card__genre">{promoFilm.genre}</span>
+                <span className="film-card__year">{promoFilm.year}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -90,12 +83,12 @@ function MainScreen(props: ConnectedComponentProps): JSX.Element {
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
+                <Link to='/mylist' className="btn btn--list film-card__button" type="button">
                   <svg viewBox="0 0 19 20" width="19" height="20">
                     <use xlinkHref="#add"></use>
                   </svg>
                   <span>My list</span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>

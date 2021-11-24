@@ -1,23 +1,36 @@
-import {FilmDataType} from '../../types/films';
+import React from 'react';
+import {connect, ConnectedProps} from 'react-redux';
+import {State} from '../../types/state';
 import Logo from '../logo/logo';
 import AddReviewForm from '../add-review-form/add-review-form';
+import LoadingScreen from '../loading-screen/loading-screen';
+
+const mapStateToProps = ({film}: State) => ({
+  film,
+});
 
 type AddReviewProps = {
-  film: FilmDataType;
-};
+  onBackToMovie: () => void;
+}
 
-function AddReview({film}: AddReviewProps): JSX.Element {
-  const {
-    background,
-    poster,
-    title,
-  } = film;
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type ConnectedComponentProps = PropsFromRedux & AddReviewProps;
+
+function AddReview({film, onBackToMovie}: ConnectedComponentProps): JSX.Element {
+
+  if (!film) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   return (
     <section className="film-card film-card--full">
       <div className="film-card__header">
         <div className="film-card__bg">
-          <img src={background} alt={title} />
+          <img src={film.background} alt={film.title} />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -28,7 +41,7 @@ function AddReview({film}: AddReviewProps): JSX.Element {
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <a href="film-page.html" className="breadcrumbs__link">{title}</a>
+                <a href="film-page.html" className="breadcrumbs__link">{film.title}</a>
               </li>
               <li className="breadcrumbs__item">
                 <a href="/" className="breadcrumbs__link">Add review</a>
@@ -49,16 +62,17 @@ function AddReview({film}: AddReviewProps): JSX.Element {
         </header>
 
         <div className="film-card__poster film-card__poster--small">
-          <img src={poster} alt={title} width="218" height="327" />
+          <img src={film.poster} alt={film.title} width="218" height="327" />
         </div>
       </div>
 
       <div className="add-review">
-        <AddReviewForm />
+        <AddReviewForm onBackToMovie={onBackToMovie}/>
       </div>
 
     </section>
   );
 }
 
-export default AddReview;
+export {AddReview};
+export default connector(AddReview);

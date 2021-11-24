@@ -1,4 +1,4 @@
-import {RatingTitleType} from './types/films';
+import {FilmDataType, RatingTitleType} from './types/films';
 
 export const APP_ROUTE = {
   MAIN: '/',
@@ -13,14 +13,7 @@ export const AUTHORIZATION_STATUS = {
   NO_AUTH: 'NO_AUTH',
   UNKNOWN: 'UNKNOWN',
 };
-export const FILMS_AMOUNT = 10;
 export const RATING_STAR_AMOUNT = 10;
-export const RATING_MIN = 1;
-export const RATING_MAX = 10;
-export const VOTES_MIN = 1;
-export const VOTES_MAX = 10;
-export const REVIEWS_MIN = 0;
-export const REVIEWS_MAX = 10;
 export const REVIEWS_TEXT: string[] = [
   'Fusce tristique felis at fermentum pharetra.',
   'Aliquam id orci ut lectus varius viverra.',
@@ -47,4 +40,29 @@ export const MINUTES_IN_HOUR = 60;
 export const TAB_LIST: string[] = ['Overview', 'Details', 'Reviews'];
 export const ACTIVE_GENRE = 'All genres';
 export const FILM_COUNT = 8;
-
+export enum APIRoute {
+  Films = '/films',
+  Promo = '/promo',
+  Favorite = '/favorite',
+  Login = '/login',
+  Logout = '/logout',
+}
+export const emptyFilm: FilmDataType = {
+  id: 0,
+  background: '',
+  poster: '',
+  image: '',
+  title: '',
+  genre: '',
+  year: 0,
+  description: '',
+  rating: 0,
+  votes: 0,
+  director: '',
+  actors: [],
+  duration: 0,
+  isFavorite: false,
+  srcFullVideo: '',
+  srcPreviewVideo: '',
+};
+export const MAX_GENRES_COUNT = 10;

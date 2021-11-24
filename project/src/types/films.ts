@@ -6,22 +6,31 @@ export type RatingTitleType = {
   AWESOME: string;
 }
 
+export type FilmReviewUserType = {
+  id: string | number;
+  name: string,
+}
+
 export type FilmReviewType = {
-  id: string;
-  text: string;
+  id: string | number;
   rating: number;
-  author: string;
   date: string;
-  dateTime: string;
+  comment: string;
+  user: FilmReviewUserType;
+}
+
+export type AddComment = {
+  rating: number;
+  comment: string;
 }
 
 export type FilmDataType = {
-  id: string;
+  id: number;
   background: string;
   poster: string;
   image: string;
   title: string;
-  genre: string[];
+  genre: string;
   year: number;
   description: string;
   rating: number;
@@ -30,7 +39,20 @@ export type FilmDataType = {
   actors: string[];
   duration: number;
   isFavorite: boolean;
-  reviews: FilmReviewType[];
   srcFullVideo: string;
   srcPreviewVideo: string;
+  name?: string;
+  ['poster_image']?: string;
+  ['preview_image']?: string;
+  ['background_image']?: string;
+  ['background_color']?: string;
+  ['video_link']?: string;
+  ['preview_video_link']?: string;
+  ['scores_count']?: number;
+  starring?: string[];
+  ['run_time']?: number;
+  released?: number;
+  ['is_favorite']?: boolean;
 }
+
+export type setFormLockType = (isSend: boolean) => void;

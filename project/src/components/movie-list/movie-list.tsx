@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {FilmDataType} from '../../types/films';
+import {emptyFilm} from '../../const';
 import FilmCard from '../film-card/film-card';
 
 type MovieListProps = {
@@ -8,8 +9,7 @@ type MovieListProps = {
 };
 
 function MovieList({films, handleClick}: MovieListProps): JSX.Element {
-  const [activeFilm, setActiveFilm] = useState(films[0]);
-
+  const [activeFilm, setActiveFilm] = useState(emptyFilm);
   const handleHover = (newActiveFilm: FilmDataType) => {
     setActiveFilm(newActiveFilm);
   };

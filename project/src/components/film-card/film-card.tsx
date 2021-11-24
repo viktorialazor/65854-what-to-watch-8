@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import {FilmDataType} from '../../types/films';
 import {Link} from 'react-router-dom';
+import {FilmDataType} from '../../types/films';
 import VideoPlayer from '../video-player/video-player';
 
 type FilmCardProps = {
