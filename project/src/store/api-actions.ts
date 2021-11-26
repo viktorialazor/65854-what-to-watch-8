@@ -5,7 +5,7 @@ import {AddComment, setFormLockType, FilmDataType, FilmReviewType} from '../type
 import {APIRoute, AUTHORIZATION_STATUS, ACTIVE_GENRE, APP_ROUTE} from '../const';
 import {adaptFilmToClient} from '../utils/adapter';
 import {saveToken, dropToken, Token} from '../services/token';
-import {changeActiveGenre, loadFilms, loadFavoriteFilms, loadSimilarFilms, loadFilm, loadPromoFilm, loadComments, requireAuthorization, requireLogout, redirectToRoute} from './action';
+import {changeActiveGenre, loadFilms, loadFavoriteFilms, changeFavoriteFilm, loadSimilarFilms, loadFilm, loadPromoFilm, loadComments, requireAuthorization, requireLogout, redirectToRoute} from './action';
 
 export const fetchFilmsAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -26,6 +26,16 @@ export const fetchFavoriteFilmsAction = (): ThunkActionResult =>
     const films: FilmDataType[] = [];
     data.forEach((item) => films.push(adaptFilmToClient(item)));
     dispatch(loadFavoriteFilms(films));
+  };
+
+export const changeFavoriteFilmStatus = (filmId: number, status: boolean): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      await api.post<FilmDataType>(`/favorite/${filmId}/${status ? 1 : 0}`);
+      dispatch(changeFavoriteFilm({filmId, status}));
+    } catch {
+      toast.error('При обновлении статуса фильма произошла ошибка.');
+    }
   };
 
 export const fetchFilmAction = (id: number): ThunkActionResult =>

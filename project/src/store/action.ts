@@ -1,4 +1,4 @@
-import {ActionType, genreListPayload, ChangeActiveGenreAction, IncrementFilmCountAction, ResetFilmCountAction} from '../types/action';
+import {ActionType, genreListPayload, changeFilmStatus, ChangeActiveGenreAction, IncrementFilmCountAction, ResetFilmCountAction} from '../types/action';
 import {FilmDataType, FilmReviewType} from '../types/films';
 
 export const changeActiveGenre = (genrePayload: genreListPayload): ChangeActiveGenreAction => ({
@@ -24,6 +24,11 @@ export const loadFilms = (films: FilmDataType[] | []) => ({
 export const loadFavoriteFilms = (favoriteFilms: FilmDataType[] | []) => ({
   type: ActionType.LoadFavoriteFilms,
   payload: favoriteFilms,
+} as const);
+
+export const changeFavoriteFilm = (changedFilm: changeFilmStatus) => ({
+  type: ActionType.ChangeFavoriteFilm,
+  payload: changedFilm,
 } as const);
 
 export const loadSimilarFilms = (films: FilmDataType[] | []) => ({

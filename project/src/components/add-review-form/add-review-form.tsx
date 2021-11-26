@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 import {State} from '../../types/state';
 import {ThunkAppDispatch} from '../../types/action';
 import {setFormLockType} from '../../types/films';
-import {RATING_STAR_AMOUNT} from '../../const';
+import {RATING_STAR_AMOUNT, RATING_BY_DEFAULT, MIN_RATING, MIN_CHARACTERS, MAX_CHARACTERS} from '../../const';
 import {addCommentAction, fetchCommentsAction} from '../../store/api-actions';
 import AddReviewRatingStar from '../add-review-rating-star/add-review-rating-star';
 
@@ -30,8 +30,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type ConnectedComponentProps = PropsFromRedux & AddReviewFormProps;
 
 function AddReviewForm({film, onSubmit, onBackToMovie}: ConnectedComponentProps): JSX.Element {
-  const [formData, setFormData] = useState({rating: 8, text: ''});
-  const [starChecked, setStarChecked] = useState(8);
+  const [formData, setFormData] = useState({rating: RATING_BY_DEFAULT, text: ''});
+  const [starChecked, setStarChecked] = useState(RATING_BY_DEFAULT);
 
   const ratingStarts = new Array(RATING_STAR_AMOUNT).fill(null);
 
@@ -64,7 +64,7 @@ function AddReviewForm({film, onSubmit, onBackToMovie}: ConnectedComponentProps)
   };
 
   const handleSubmit = () => {
-    if (film?.id !== undefined && (formData.text.length > 50 && formData.text.length < 400) && formData.rating !== 0) {
+    if (film?.id !== undefined && (formData.text.length > MIN_CHARACTERS && formData.text.length < MAX_CHARACTERS) && formData.rating !== MIN_RATING) {
       onSubmit(film?.id, formData.text, formData.rating, setFormLock);
       onBackToMovie();
     } else {

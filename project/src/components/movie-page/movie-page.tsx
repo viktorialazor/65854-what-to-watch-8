@@ -13,6 +13,8 @@ import MovieDetails from '../movie-details/movie-details';
 import MovieReviews from '../movie-reviews/movie-reviews';
 import LoadingScreen from '../loading-screen/loading-screen';
 import SignInOut from '../sign-in-out/sign-in-out';
+import FavoriteButton from '../favorite-button/favorite-button';
+import Player from '../player/player';
 
 const FILM_CARD_AMOUNT = 4;
 
@@ -100,18 +102,15 @@ function MoviePage({tabList, activeTab, getActiveTab, film, comments, similarFil
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s"></use>
-                  </svg>
-                  <span>Play</span>
-                </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 18 14" width="18" height="14">
-                    <use xlinkHref="#in-list"></use>
-                  </svg>
-                  <span>My list</span>
-                </button>
+                <Link to={`/player/${film.id}`} className="film-card__button">
+                  <button onClick={()=>{<Player film={film} />;}} className="btn btn--play film-card__button" type="button">
+                    <svg viewBox="0 0 19 19" width="19" height="19">
+                      <use xlinkHref="#play-s"></use>
+                    </svg>
+                    <span>Play</span>
+                  </button>
+                </Link>
+                <FavoriteButton changedFilm={film} />
                 {getReviewButton()}
               </div>
             </div>

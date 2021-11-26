@@ -11,6 +11,8 @@ import MovieList from '../movie-list/movie-list';
 import GenresList from '../genres-list/genres-list';
 import ShowMore from '../show-more/show-more';
 import SignInOut from '../sign-in-out/sign-in-out';
+import FavoriteButton from '../favorite-button/favorite-button';
+import Player from '../player/player';
 
 type MainScreenProps = {
   handleClick: (newActiveClickFilm: FilmDataType) => void;
@@ -77,18 +79,15 @@ function MainScreen(props: ConnectedComponentProps): JSX.Element {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s"></use>
-                  </svg>
-                  <span>Play</span>
-                </button>
-                <Link to='/mylist' className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
+                <Link to={`/player/${promoFilm.id}`} className="film-card__button">
+                  <button onClick={()=>{<Player film={promoFilm} />;}} className="btn btn--play film-card__button" type="button">
+                    <svg viewBox="0 0 19 19" width="19" height="19">
+                      <use xlinkHref="#play-s"></use>
+                    </svg>
+                    <span>Play</span>
+                  </button>
                 </Link>
+                <FavoriteButton changedFilm={promoFilm} />
               </div>
             </div>
           </div>

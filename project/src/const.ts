@@ -1,4 +1,4 @@
-import {FilmDataType, RatingTitleType} from './types/films';
+import {FilmDataType} from './types/films';
 
 export const APP_ROUTE = {
   MAIN: '/',
@@ -13,29 +13,15 @@ export const AUTHORIZATION_STATUS = {
   NO_AUTH: 'NO_AUTH',
   UNKNOWN: 'UNKNOWN',
 };
-export const RATING_STAR_AMOUNT = 10;
-export const REVIEWS_TEXT: string[] = [
-  'Fusce tristique felis at fermentum pharetra.',
-  'Aliquam id orci ut lectus varius viverra.',
-  'Aliquam erat volutpat.',
-  'Nunc fermentum tortor ac porta dapibus.',
-];
-export const REVIEWS_AUTHORS: string[] = [
-  'Tim Macoveev',
-  'John Doe',
-];
-export const RatingTitle: RatingTitleType = {
+export const RATING_TITLE = {
   BAD: 'Bad',
   NORMAL: 'Normal',
   GOOD: 'Good',
   VERY_GOOD: 'Very good',
   AWESOME: 'Awesome',
 };
+export const RATING_STAR_AMOUNT = 10;
 export const YEAR = 2019;
-export const MAX_MONTH_GAP = 12;
-export const MAX_DAYS_GAP = 7;
-export const MAX_HOURS_GAP = 24;
-export const MAX_MINUTES_GAP = 60;
 export const MINUTES_IN_HOUR = 60;
 export const TAB_LIST: string[] = ['Overview', 'Details', 'Reviews'];
 export const ACTIVE_GENRE = 'All genres';
@@ -66,3 +52,7 @@ export const emptyFilm: FilmDataType = {
   srcPreviewVideo: '',
 };
 export const MAX_GENRES_COUNT = 10;
+export const RATING_BY_DEFAULT = 8;
+export const MIN_RATING = 0;
+export const MIN_CHARACTERS = 50;
+export const MAX_CHARACTERS = 400;

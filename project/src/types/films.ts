@@ -1,11 +1,3 @@
-export type RatingTitleType = {
-  BAD: string;
-  NORMAL: string;
-  GOOD: string;
-  VERY_GOOD: string;
-  AWESOME: string;
-}
-
 export type FilmReviewUserType = {
   id: string | number;
   name: string,

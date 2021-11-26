@@ -9,6 +9,7 @@ export const ActionType = {
   ResetFilmCount: 'film/resetFilmCount',
   LoadFilms: 'data/loadFilms',
   LoadFavoriteFilms: 'data/loadFavoriteFilms',
+  ChangeFavoriteFilm: 'data/changeFavoriteFilm',
   LoadSimilarFilms: 'data/loadSimilarFilms',
   LoadFilm: 'data/loadFilm',
   LoadPromoFilm: 'data/loadPromoFilm',
@@ -21,6 +22,11 @@ export const ActionType = {
 export type genreListPayload = {
   genre: string,
   filmList: FilmDataType[] | [],
+}
+
+export type changeFilmStatus = {
+  filmId: number,
+  status: boolean,
 }
 
 export type ChangeActiveGenreAction = {
@@ -46,6 +52,11 @@ export type LoadFilmsAction = {
 export type LoadFavoriteFilmsAction = {
   type: typeof ActionType.LoadFavoriteFilms;
   payload: FilmDataType[] | [];
+};
+
+export type ChangeFavoriteFilmAction = {
+  type: typeof ActionType.ChangeFavoriteFilm;
+  payload: changeFilmStatus;
 };
 
 export type LoadSimilarFilmsAction = {
@@ -87,4 +98,4 @@ export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosIn
 
 export type ThunkAppDispatch = ThunkDispatch<State, AxiosInstance, Actions>;
 
-export type Actions = ChangeActiveGenreAction | IncrementFilmCountAction | ResetFilmCountAction | LoadFilmsAction | LoadSimilarFilmsAction | LoadFavoriteFilmsAction | LoadFilmAction | LoadPromoFilmAction | LoadCommentsAction | RequireAuthorizationAction | RequireLogoutAction | RedirectToRouteAction;
+export type Actions = ChangeActiveGenreAction | IncrementFilmCountAction | ResetFilmCountAction | LoadFilmsAction | LoadSimilarFilmsAction | LoadFavoriteFilmsAction | ChangeFavoriteFilmAction | LoadFilmAction | LoadPromoFilmAction | LoadCommentsAction | RequireAuthorizationAction | RequireLogoutAction | RedirectToRouteAction;

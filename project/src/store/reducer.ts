@@ -1,4 +1,4 @@
-import {ActionType, Actions, ChangeActiveGenreAction, LoadFilmsAction, LoadFavoriteFilmsAction, LoadSimilarFilmsAction, LoadFilmAction, LoadPromoFilmAction, LoadCommentsAction, RequireAuthorizationAction, RequireLogoutAction} from '../types/action';
+import {ActionType, Actions, ChangeActiveGenreAction, LoadFilmsAction, LoadFavoriteFilmsAction, ChangeFavoriteFilmAction, LoadSimilarFilmsAction, LoadFilmAction, LoadPromoFilmAction, LoadCommentsAction, RequireAuthorizationAction, RequireLogoutAction} from '../types/action';
 import {State} from '../types/state';
 import {FilmDataType} from '../types/films';
 import {ACTIVE_GENRE, FILM_COUNT, AUTHORIZATION_STATUS, emptyFilm} from '../const';
@@ -32,6 +32,17 @@ const reducer = (state: State = initialState, action: Actions): State => {
       return {...state, films: (action as LoadFilmsAction).payload, isDataLoaded: true};
     case ActionType.LoadFavoriteFilms:
       return {...state, favoriteFilms: (action as LoadFavoriteFilmsAction).payload};
+    case ActionType.ChangeFavoriteFilm: {
+      let film = Object.assign({}, state.film);
+      let promoFilm = Object.assign({}, state.promoFilm);
+      if (film?.id === (action as ChangeFavoriteFilmAction).payload.filmId) {
+        film = {...film, isFavorite: (action as ChangeFavoriteFilmAction).payload.status};
+      }
+      if (promoFilm.id === (action as ChangeFavoriteFilmAction).payload.filmId) {
+        promoFilm = {...promoFilm, isFavorite: (action as ChangeFavoriteFilmAction).payload.status};
+      }
+      return {...state, film, promoFilm};
+    }
     case ActionType.LoadSimilarFilms:
       return {...state, similarFilms: ((action as LoadSimilarFilmsAction).payload).map((film: FilmDataType) => adaptFilmToClient(film))};
     case ActionType.LoadFilm:
