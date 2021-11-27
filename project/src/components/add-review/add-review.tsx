@@ -1,24 +1,16 @@
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
-import {State} from '../../types/state';
+import {useSelector} from 'react-redux';
 import Logo from '../logo/logo';
 import AddReviewForm from '../add-review-form/add-review-form';
 import LoadingScreen from '../loading-screen/loading-screen';
-
-const mapStateToProps = ({film}: State) => ({
-  film,
-});
+import {getFilm} from '../../store/film-data/selectors';
 
 type AddReviewProps = {
   onBackToMovie: () => void;
 }
 
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & AddReviewProps;
-
-function AddReview({film, onBackToMovie}: ConnectedComponentProps): JSX.Element {
+function AddReview({onBackToMovie}: AddReviewProps): JSX.Element {
+  const film = useSelector(getFilm);
 
   if (!film) {
     return (
@@ -74,5 +66,4 @@ function AddReview({film, onBackToMovie}: ConnectedComponentProps): JSX.Element 
   );
 }
 
-export {AddReview};
-export default connector(AddReview);
+export default AddReview;

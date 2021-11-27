@@ -1,9 +1,6 @@
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {Dispatch} from 'redux';
-import {State} from '../../types/state';
-import {Actions} from '../../types/action';
 import {FilmDataType} from '../../types/films';
 import {incrementFilmCount} from '../../store/action';
 import Logo from '../logo/logo';
@@ -13,31 +10,24 @@ import ShowMore from '../show-more/show-more';
 import SignInOut from '../sign-in-out/sign-in-out';
 import FavoriteButton from '../favorite-button/favorite-button';
 import Player from '../player/player';
+import {getPromoFilm} from '../../store/film-data/selectors';
+import {getGenrePayload, getFilmCount} from '../../store/film-process/selectors';
 
 type MainScreenProps = {
   handleClick: (newActiveClickFilm: FilmDataType) => void;
 }
 
-const mapStateToProps = ({genrePayload, filmCount, promoFilm}: State) => ({
-  genrePayload,
-  filmCount,
-  promoFilm,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onClickShowMore(count: number) {
-    dispatch(incrementFilmCount(count));
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & MainScreenProps;
-
-function MainScreen(props: ConnectedComponentProps): JSX.Element {
-  const {handleClick, filmCount, genrePayload, promoFilm, onClickShowMore} = props;
+function MainScreen({handleClick}: MainScreenProps): JSX.Element {
+  const genrePayload = useSelector(getGenrePayload);
+  const filmCount = useSelector(getFilmCount);
+  const promoFilm = useSelector(getPromoFilm);
   const {filmList} = genrePayload;
+
+  const dispatch = useDispatch();
+
+  const onClickShowMore = (count: number) => {
+    dispatch(incrementFilmCount(count));
+  };
 
   const getShowMoreButton = (films: FilmDataType[], count: number): JSX.Element | null => {
     if (films.length > count) {
@@ -126,5 +116,4 @@ function MainScreen(props: ConnectedComponentProps): JSX.Element {
   );
 }
 
-export {MainScreen};
-export default connector(MainScreen);
+export default MainScreen;

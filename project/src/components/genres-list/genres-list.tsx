@@ -1,32 +1,25 @@
-import {Dispatch} from 'redux';
-import {connect, ConnectedProps} from 'react-redux';
-import {State} from '../../types/state';
-import {genreListPayload, Actions} from '../../types/action';
+import {useSelector, useDispatch} from 'react-redux';
+import {genreListPayload} from '../../types/action';
 import {changeActiveGenre, resetFilmCount} from '../../store/action';
 import {MAX_GENRES_COUNT} from '../../const';
 import GenreItem from '../genre-item/genre-item';
+import {getFilms} from '../../store/film-data/selectors';
+import {getGenrePayload} from '../../store/film-process/selectors';
 
-const mapStateToProps = ({films, genrePayload}: State) => ({
-  films,
-  genrePayload,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<Actions>) => ({
-  onActiveGenre(genrePayload: genreListPayload) {
-    dispatch(changeActiveGenre(genrePayload));
-  },
-  onClickShowMore(count: number) {
-    dispatch(resetFilmCount(count));
-  },
-});
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function GenresList(props: PropsFromRedux): JSX.Element {
-  const {films, genrePayload, onActiveGenre, onClickShowMore} = props;
+function GenresList(): JSX.Element {
+  const films = useSelector(getFilms);
+  const genrePayload = useSelector(getGenrePayload);
   const {genre} = genrePayload;
+
+  const dispatch = useDispatch();
+
+  const onActiveGenre = (payload: genreListPayload) => {
+    dispatch(changeActiveGenre(payload));
+  };
+
+  const onClickShowMore = (count: number) => {
+    dispatch(resetFilmCount(count));
+  };
 
   const genresList: string[] = ['All genres'];
   films.forEach((item) => genresList.push(item.genre));
@@ -39,5 +32,4 @@ function GenresList(props: PropsFromRedux): JSX.Element {
   );
 }
 
-export {GenresList};
-export default connector(GenresList);
+export default GenresList;

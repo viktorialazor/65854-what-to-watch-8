@@ -1,8 +1,7 @@
 import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
 import {useState} from 'react';
 import browserHistory from '../../browser-history';
-import {connect, ConnectedProps} from 'react-redux';
-import {State} from '../../types/state';
+import {useSelector} from 'react-redux';
 import {FilmDataType} from '../../types/films';
 import {AUTHORIZATION_STATUS, APP_ROUTE, TAB_LIST, emptyFilm} from '../../const';
 import {isCheckedAuth} from '../../utils/common';
@@ -15,19 +14,13 @@ import Player from '../player/player';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import PrivateRoute from '../private-route/private-route';
 import LoadingScreen from '../loading-screen/loading-screen';
+import {getFilms, getLoadedDataStatus} from '../../store/film-data/selectors';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
-const mapStateToProps = ({authorizationStatus, isDataLoaded, films}: State) => ({
-  films,
-  authorizationStatus,
-  isDataLoaded,
-});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function App(props: PropsFromRedux): JSX.Element {
-  const {films, authorizationStatus, isDataLoaded} = props;
+function App(): JSX.Element {
+  const films = useSelector(getFilms);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const isDataLoaded = useSelector(getLoadedDataStatus);
   const [activeClickFilm, setActiveClickFilm] = useState(emptyFilm);
   const [activeTab, setActiveTab] = useState(TAB_LIST[0]);
 
@@ -98,5 +91,4 @@ function App(props: PropsFromRedux): JSX.Element {
   );
 }
 
-export {App};
-export default connector(App);
+export default App;

@@ -1,67 +1,94 @@
-import {ActionType, genreListPayload, changeFilmStatus, ChangeActiveGenreAction, IncrementFilmCountAction, ResetFilmCountAction} from '../types/action';
+import {createAction} from '@reduxjs/toolkit';
+import {ActionType, genreListPayload, changeFilmStatus} from '../types/action';
 import {FilmDataType, FilmReviewType} from '../types/films';
 
-export const changeActiveGenre = (genrePayload: genreListPayload): ChangeActiveGenreAction => ({
-  type: ActionType.ChangeActiveGenre,
-  payload: genrePayload,
-});
+export const changeActiveGenre = createAction(
+  ActionType.ChangeActiveGenre,
+  (genrePayload: genreListPayload) => ({
+    payload: genrePayload,
+  }),
+);
 
-export const incrementFilmCount = (count: number): IncrementFilmCountAction => ({
-  type: ActionType.IncrementFilmCount,
-  payload: count,
-});
+export const incrementFilmCount = createAction(
+  ActionType.IncrementFilmCount,
+  (count: number) => ({
+    payload: count,
+  }),
+);
 
-export const resetFilmCount = (count: number): ResetFilmCountAction => ({
-  type: ActionType.ResetFilmCount,
-  payload: count,
-});
+export const resetFilmCount = createAction(
+  ActionType.ResetFilmCount,
+  (count: number) => ({
+    payload: count,
+  }),
+);
 
-export const loadFilms = (films: FilmDataType[] | []) => ({
-  type: ActionType.LoadFilms,
-  payload: films,
-} as const);
+export const loadFilms = createAction(
+  ActionType.LoadFilms,
+  (films: FilmDataType[] | []) => ({
+    payload: films,
+  }),
+);
 
-export const loadFavoriteFilms = (favoriteFilms: FilmDataType[] | []) => ({
-  type: ActionType.LoadFavoriteFilms,
-  payload: favoriteFilms,
-} as const);
+export const loadFavoriteFilms = createAction(
+  ActionType.LoadFavoriteFilms,
+  (favoriteFilms: FilmDataType[] | []) => ({
+    payload: favoriteFilms,
+  }),
+);
 
-export const changeFavoriteFilm = (changedFilm: changeFilmStatus) => ({
-  type: ActionType.ChangeFavoriteFilm,
-  payload: changedFilm,
-} as const);
+export const changeFavoriteFilm = createAction(
+  ActionType.ChangeFavoriteFilm,
+  (changedFilm: changeFilmStatus) => ({
+    payload: changedFilm,
+  }),
+);
 
-export const loadSimilarFilms = (films: FilmDataType[] | []) => ({
-  type: ActionType.LoadSimilarFilms,
-  payload: films,
-} as const);
+export const loadSimilarFilms = createAction(
+  ActionType.LoadSimilarFilms,
+  (films: FilmDataType[] | []) => ({
+    payload: films,
+  }),
+);
 
-export const loadFilm = (film: FilmDataType) => ({
-  type: ActionType.LoadFilm,
-  payload: film,
-} as const);
+export const loadFilm = createAction(
+  ActionType.LoadFilm,
+  (film: FilmDataType) => ({
+    payload: film,
+  }),
+);
 
-export const loadPromoFilm = (film: FilmDataType) => ({
-  type: ActionType.LoadPromoFilm,
-  payload: film,
-} as const);
+export const loadPromoFilm = createAction(
+  ActionType.LoadPromoFilm,
+  (film: FilmDataType) => ({
+    payload: film,
+  }),
+);
 
-export const loadComments = (comments: FilmReviewType[] | []) => ({
-  type: ActionType.LoadComments,
-  payload: comments,
-} as const);
+export const loadComments = createAction(
+  ActionType.LoadComments,
+  (comments: FilmReviewType[] | []) => ({
+    payload: comments,
+  }),
+);
 
-export const requireAuthorization = (authStatus: string) => ({
-  type: ActionType.RequireAuthorization,
-  payload: authStatus,
-} as const);
+export const requireAuthorization = createAction(
+  ActionType.RequireAuthorization,
+  (authStatus: string) => ({
+    payload: authStatus,
+  }),
+);
 
-export const requireLogout = (authStatus: string) => ({
-  type: ActionType.RequireLogout,
-  payload: authStatus,
-} as const);
+export const requireLogout = createAction(
+  ActionType.RequireLogout,
+  (authStatus: string) => ({
+    payload: authStatus,
+  }),
+);
 
-export const redirectToRoute = (url: string) => ({
-  type: ActionType.RedirectToRoute,
-  payload: url,
-} as const);
+export const redirectToRoute = createAction(
+  ActionType.RedirectToRoute,
+  (url: string) => ({
+    payload: url,
+  }),
+);

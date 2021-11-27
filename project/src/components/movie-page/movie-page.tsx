@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import {connect, ConnectedProps, useDispatch} from 'react-redux';
-import {State} from '../../types/state';
+import {useSelector, useDispatch} from 'react-redux';
 import {FilmDataType} from '../../types/films';
 import {AUTHORIZATION_STATUS} from '../../const';
 import {fetchFilmAction, fetchCommentsAction, fetchSimilarFilmsAction} from '../../store/api-actions';
@@ -15,17 +14,10 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import SignInOut from '../sign-in-out/sign-in-out';
 import FavoriteButton from '../favorite-button/favorite-button';
 import Player from '../player/player';
+import {getFilm, getComments, getSimilarFilms} from '../../store/film-data/selectors';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 const FILM_CARD_AMOUNT = 4;
-
-const mapStateToProps = ({film, comments, similarFilms, authorizationStatus}: State) => ({
-  film,
-  comments,
-  similarFilms,
-  authorizationStatus,
-});
-
-const connector = connect(mapStateToProps);
 
 type MoviePageProps = {
   tabList: string[];
@@ -35,10 +27,12 @@ type MoviePageProps = {
   handleClick: (newActiveClickFilm: FilmDataType) => void;
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & MoviePageProps;
+function MoviePage({tabList, activeTab, getActiveTab, id, handleClick}: MoviePageProps): JSX.Element {
+  const film = useSelector(getFilm);
+  const comments = useSelector(getComments);
+  const similarFilms = useSelector(getSimilarFilms);
+  const authorizationStatus = useSelector(getAuthorizationStatus);
 
-function MoviePage({tabList, activeTab, getActiveTab, film, comments, similarFilms, authorizationStatus, id, handleClick}: ConnectedComponentProps): JSX.Element {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -158,5 +152,4 @@ function MoviePage({tabList, activeTab, getActiveTab, film, comments, similarFil
   );
 }
 
-export {MoviePage};
-export default connector(MoviePage);
+export default MoviePage;

@@ -1,29 +1,21 @@
 import React from 'react';
-import {connect, ConnectedProps} from 'react-redux';
-import {State} from '../../types/state';
-import {ThunkAppDispatch} from '../../types/action';
+import {useSelector, useDispatch} from 'react-redux';
 import {FilmDataType} from '../../types/films';
 import {AUTHORIZATION_STATUS} from '../../const';
 import {changeFavoriteFilmStatus} from '../../store/api-actions';
-import {store} from '../../index';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 type FavoriteButtonProps = {
   changedFilm: FilmDataType;
 }
 
-const mapStateToProps = ({authorizationStatus}: State) => ({
-  authorizationStatus,
-});
+function FavoriteButton({changedFilm}: FavoriteButtonProps): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const dispatch = useDispatch();
 
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & FavoriteButtonProps;
-
-function FavoriteButton({authorizationStatus, changedFilm}: ConnectedComponentProps): JSX.Element {
   const handleFavoriteClick = ()=>{
     if (changedFilm !== undefined) {
-      (store.dispatch as ThunkAppDispatch)(changeFavoriteFilmStatus(changedFilm.id, !changedFilm.isFavorite));
+      dispatch(changeFavoriteFilmStatus(changedFilm.id, !changedFilm.isFavorite));
     }};
 
   return (
@@ -44,5 +36,4 @@ function FavoriteButton({authorizationStatus, changedFilm}: ConnectedComponentPr
   );
 }
 
-export {FavoriteButton};
-export default connector(FavoriteButton);
+export default FavoriteButton;

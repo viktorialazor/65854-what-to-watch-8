@@ -1,20 +1,13 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {connect, ConnectedProps} from 'react-redux';
-import {State} from '../../types/state';
+import {useSelector} from 'react-redux';
 import {AUTHORIZATION_STATUS} from '../../const';
 import SignOutButton from '../sign-out-button/sign-out-button';
 import SignInButton from '../sign-in-button/sign-in-button';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
-const mapStateToProps = ({authorizationStatus}: State) => ({
-  authorizationStatus,
-});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-function SignInOut({authorizationStatus}: PropsFromRedux): JSX.Element {
+function SignInOut(): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
   const getSignButton = (): JSX.Element => {
     if (authorizationStatus === AUTHORIZATION_STATUS.AUTH) {
       return (<SignOutButton />);
@@ -38,5 +31,4 @@ function SignInOut({authorizationStatus}: PropsFromRedux): JSX.Element {
     </ul>);
 }
 
-export {SignInOut};
-export default connector(SignInOut);
+export default SignInOut;

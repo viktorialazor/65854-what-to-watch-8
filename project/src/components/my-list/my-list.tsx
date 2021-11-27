@@ -1,30 +1,24 @@
 import {useEffect} from 'react';
-import {connect, ConnectedProps, useDispatch} from 'react-redux';
-import {State} from '../../types/state';
+import {useSelector, useDispatch} from 'react-redux';
 import {FilmDataType} from '../../types/films';
 import {AUTHORIZATION_STATUS} from '../../const';
 import Logo from '../logo/logo';
 import MovieList from '../movie-list/movie-list';
 import SignInOut from '../sign-in-out/sign-in-out';
 import {fetchFavoriteFilmsAction} from '../../store/api-actions';
+import {getFavoriteFilms} from '../../store/film-data/selectors';
+import {getAuthorizationStatus} from '../../store/user-process/selectors';
 
 const FILM_CARD_AMOUNT = 9;
-
-const mapStateToProps = ({authorizationStatus, favoriteFilms}: State) => ({
-  authorizationStatus,
-  favoriteFilms,
-});
 
 type MyListProps = {
   handleClick: (newActiveClickFilm: FilmDataType) => void;
 }
 
-const connector = connect(mapStateToProps);
+function MyList({handleClick}: MyListProps): JSX.Element {
+  const authorizationStatus = useSelector(getAuthorizationStatus);
+  const favoriteFilms = useSelector(getFavoriteFilms);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & MyListProps;
-
-function MyList({authorizationStatus, favoriteFilms, handleClick}: ConnectedComponentProps): JSX.Element {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -68,5 +62,4 @@ function MyList({authorizationStatus, favoriteFilms, handleClick}: ConnectedComp
   );
 }
 
-export {MyList};
-export default connector(MyList);
+export default MyList;

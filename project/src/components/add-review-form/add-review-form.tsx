@@ -1,39 +1,30 @@
 import React, {useRef, useState} from 'react';
-import {connect, ConnectedProps} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {State} from '../../types/state';
-import {ThunkAppDispatch} from '../../types/action';
 import {setFormLockType} from '../../types/films';
 import {RATING_STAR_AMOUNT, RATING_BY_DEFAULT, MIN_RATING, MIN_CHARACTERS, MAX_CHARACTERS} from '../../const';
 import {addCommentAction, fetchCommentsAction} from '../../store/api-actions';
 import AddReviewRatingStar from '../add-review-rating-star/add-review-rating-star';
-
-const mapStateToProps = ({film}: State) => ({
-  film,
-});
-
-const mapDispatchToProps = (dispatch: ThunkAppDispatch) => ({
-  onSubmit(id: number, comment: string, rating: number, setFormLock: setFormLockType) {
-    dispatch(addCommentAction(id,{rating, comment}, setFormLock));
-    dispatch(fetchCommentsAction(id));
-  },
-});
+import {getFilm} from '../../store/film-data/selectors';
 
 type AddReviewFormProps = {
   onBackToMovie: () => void;
 }
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type ConnectedComponentProps = PropsFromRedux & AddReviewFormProps;
-
-function AddReviewForm({film, onSubmit, onBackToMovie}: ConnectedComponentProps): JSX.Element {
+function AddReviewForm({onBackToMovie}: AddReviewFormProps): JSX.Element {
+  const film = useSelector(getFilm);
   const [formData, setFormData] = useState({rating: RATING_BY_DEFAULT, text: ''});
   const [starChecked, setStarChecked] = useState(RATING_BY_DEFAULT);
 
   const ratingStarts = new Array(RATING_STAR_AMOUNT).fill(null);
+
+  const dispatch = useDispatch();
+
+  const onSubmit = (id: number, comment: string, rating: number, setFormLock: setFormLockType) => {
+    dispatch(addCommentAction(id,{rating, comment}, setFormLock));
+    dispatch(fetchCommentsAction(id));
+  };
 
   const handleRatingChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setStarChecked(Number(evt.target.value));
@@ -93,5 +84,4 @@ function AddReviewForm({film, onSubmit, onBackToMovie}: ConnectedComponentProps)
   );
 }
 
-export {AddReviewForm};
-export default connector(AddReviewForm);
+export default AddReviewForm;
